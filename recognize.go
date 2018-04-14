@@ -1,6 +1,9 @@
 package kairgo
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // ResponseRecognize ...
 type ResponseRecognize struct {
@@ -8,16 +11,16 @@ type ResponseRecognize struct {
 	RawResponse []byte
 	Images      []struct {
 		Transaction struct {
-			Status      string  `json:"status"`
-			Width       int     `json:"width"`
-			TopLeftX    int     `json:"topLeftX"`
-			TopLeftY    int     `json:"topLeftY"`
-			GalleryName string  `json:"gallery_name"`
-			FaceID      int     `json:"face_id"`
-			Confidence  float64 `json:"confidence"`
-			SubjectID   string  `json:"subject_id"`
-			Height      int     `json:"height"`
-			Quality     float64 `json:"quality"`
+			Status      string      `json:"status"`
+			Width       int         `json:"width"`
+			TopLeftX    int         `json:"topLeftX"`
+			TopLeftY    int         `json:"topLeftY"`
+			GalleryName string      `json:"gallery_name"`
+			FaceID      interface{} `json:"face_id"`
+			Confidence  float64     `json:"confidence"`
+			SubjectID   string      `json:"subject_id"`
+			Height      int         `json:"height"`
+			Quality     float64     `json:"quality"`
 		} `json:"transaction"`
 		Candidates []struct {
 			SubjectID           string  `json:"subject_id"`
@@ -68,6 +71,7 @@ func (k *Kairos) Recognize(image, galleryName, minHeadScale, threshold string, m
 	re := &ResponseRecognize{}
 	uErr := json.Unmarshal(resp, &re)
 	if uErr != nil {
+		fmt.Println(string(resp))
 		return nil, uErr
 	}
 
